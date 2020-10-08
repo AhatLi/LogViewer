@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,12 +20,17 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.test.websockettest.service.TestService;
+
 public class SocketHandler extends TextWebSocketHandler implements InitializingBean {
     //private final Logger logger = LogManager.getLogger(getClass());
     private Map<WebSocketSession, TimerExecutor> sessionMap = new HashMap<WebSocketSession, TimerExecutor>();
 	private ScheduledThreadPoolExecutor executor = null;
 	private int c1Interval = 3000;
     RestTemplate restTemplate = null;
+
+	@Autowired
+	TestService testService;
 
     private ClientHttpRequestFactory getClientHttpRequestFactory() 
     {
@@ -97,7 +103,7 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
           super.afterConnectionEstablished(session);
 
-          TimerExecutor ex = new TimerExecutor(session);
+          TimerExecutor ex = new TimerExecutor(session, testService);
           sessionMap.put(session, ex);
           ex.start();
           

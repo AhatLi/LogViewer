@@ -25,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.test.websockettest.service.AlarmTeskService;
 import com.test.websockettest.service.TestService;
+import com.test.websockettest.vo.S3VO;
 import com.test.websockettest.vo.TestVO;
 
 /**
@@ -142,6 +143,19 @@ public class HomeController {
               model.addAttribute("serverTime", aa);
         }else{
               model.addAttribute("serverTime", "Fail_DB_Connection");
+        }
+		return "home";
+	}
+	
+	@RequestMapping(value = "/testS3")
+	public String testS3(Locale locale, Model model) {	
+        S3VO s3VO = new S3VO();
+        
+        List<S3VO> list = TestService.getS3(s3VO);
+        
+        for(int i = 0; i < list.size(); i++)
+        {
+        	System.out.println(list.get(i).getX_edge_request_id());
         }
 		return "home";
 	}

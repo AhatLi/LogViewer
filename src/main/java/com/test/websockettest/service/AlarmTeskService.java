@@ -29,7 +29,7 @@ public class AlarmTeskService
         return clientHttpRequestFactory;
     }
     
-	@Scheduled(fixedDelay=10000)
+	@Scheduled(fixedDelay=100000)
 	public void TestScheduler()
 	{
      	try

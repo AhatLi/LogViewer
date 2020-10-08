@@ -3,5 +3,6 @@
 <configuration>
       <typeAliases>
             <typeAlias alias="TestVO" type="com.test.websockettest.vo.TestVO"></typeAlias>
+            <typeAlias alias="S3VO" type="com.test.websockettest.vo.S3VO"></typeAlias>
       </typeAliases>
 </configuration>
