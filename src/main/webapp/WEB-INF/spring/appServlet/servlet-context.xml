@@ -32,13 +32,13 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.test.websockettest" />
+	<context:component-scan base-package="com.test.LogViewer" />
 	
 <websocket:handlers>
         <websocket:mapping path="/websocket/echo.do" handler="myHandler"/>
     </websocket:handlers> 
 
-    <beans:bean id="myHandler" class="com.test.websockettest.Handler.SocketHandler"/>
+    <beans:bean id="myHandler" class="com.test.LogViewer.Handler.SocketHandler"/>
 	
 	
 </beans:beans>

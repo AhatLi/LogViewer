@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="websocket.mappers.ApacheMapper">
+
+      <select id="getApache" resultType="ApacheVO" parameterType="ApacheVO">
+            SELECT * FROM apache
+      </select>
+      
+      <select id="getApacheCount" resultType="ApacheVO">
+            SELECT code AS keyword, COUNT(*) AS val FROM apache GROUP BY code
+      </select>
+
+      <select id="getApacheError" resultType="ApacheVO" parameterType="ApacheVO">
+            SELECT * FROM apache
+      </select>
+      
+      <select id="getApacheErrorCount" resultType="ApacheVO">
+            SELECT code AS keyword, COUNT(*) AS val FROM apache WHERE GROUP BY code
+      </select>
+      
+</mapper>
+

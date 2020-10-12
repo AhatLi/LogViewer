@@ -1,4 +1,4 @@
-package com.test.websockettest.Handler;
+package com.test.LogViewer.Handler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.test.websockettest.service.TestService;
+import com.test.LogViewer.service.LogViewerService;
 
 public class SocketHandler extends TextWebSocketHandler implements InitializingBean {
     //private final Logger logger = LogManager.getLogger(getClass());
@@ -30,7 +30,7 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
     RestTemplate restTemplate = null;
 
 	@Autowired
-	TestService testService;
+	LogViewerService LogViewerService;
 
     private ClientHttpRequestFactory getClientHttpRequestFactory() 
     {
@@ -76,7 +76,7 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
         {
             try 
             {
-            	test();
+            //	test();
 	        }
 	        catch (Exception e) 
 	        {
@@ -103,7 +103,7 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
           super.afterConnectionEstablished(session);
 
-          TimerExecutor ex = new TimerExecutor(session, testService);
+          TimerExecutor ex = new TimerExecutor(session, LogViewerService);
           sessionMap.put(session, ex);
           ex.start();
           

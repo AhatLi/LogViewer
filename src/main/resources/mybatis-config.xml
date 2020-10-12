@@ -2,7 +2,7 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
       <typeAliases>
-            <typeAlias alias="TestVO" type="com.test.websockettest.vo.TestVO"></typeAlias>
-            <typeAlias alias="S3VO" type="com.test.websockettest.vo.S3VO"></typeAlias>
+            <typeAlias alias="S3VO" type="com.test.LogViewer.vo.S3VO"></typeAlias>
+            <typeAlias alias="ApacheVO" type="com.test.LogViewer.vo.ApacheVO"></typeAlias>
       </typeAliases>
 </configuration>

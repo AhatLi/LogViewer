@@ -2,7 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="websocket.mappers.S3Mapper">
+
       <select id="getS3" resultType="S3VO" parameterType="S3VO">
+            SELECT * FROM s3
+      </select>
+      
+      <select id="getS3Count" resultType="S3VO">
             SELECT sc_status AS keyword, COUNT(*) AS val FROM s3 GROUP BY sc_status
       </select>
+
+      <select id="getS3Error" resultType="S3VO" parameterType="S3VO">
+            SELECT * FROM s3 WHERE 
+             <![CDATA[
+            sc_status >= 400 AND sc_status < 500
+            ]]>
+      </select>
+      
+      <select id="getS3ErrorCount" resultType="S3VO">
+            SELECT sc_status AS keyword, COUNT(*) AS val FROM s3 WHERE
+             <![CDATA[
+            sc_status >= 400 AND sc_status < 500
+            ]]>
+            GROUP BY sc_status
+      </select>
+      
 </mapper>
+

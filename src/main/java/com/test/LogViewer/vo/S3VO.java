@@ -1,4 +1,4 @@
-package com.test.websockettest.vo;
+package com.test.LogViewer.vo;
 
 public class S3VO {
     private String cs_uri_stem;

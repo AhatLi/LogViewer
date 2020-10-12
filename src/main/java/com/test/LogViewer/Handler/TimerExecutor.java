@@ -1,4 +1,4 @@
-package com.test.websockettest.Handler;
+package com.test.LogViewer.Handler;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -21,23 +21,24 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import com.test.websockettest.service.TestService;
-import com.test.websockettest.vo.S3VO;
+import com.test.LogViewer.service.LogViewerService;
+import com.test.LogViewer.vo.ApacheVO;
+import com.test.LogViewer.vo.S3VO;
 
 public class TimerExecutor 
 {
 	private ScheduledThreadPoolExecutor executor = null;
 	private int c1Interval = 5000;
-	private int c2Interval = 3000;
+//	private int c2Interval = 3000;
 	private WebSocketSession session = null;
 	
-	TestService testService;
+	LogViewerService LogViewerService;
 
-	TimerExecutor(WebSocketSession session, TestService testService) 
+	TimerExecutor(WebSocketSession session, LogViewerService LogViewerService) 
 	{
 		this.executor = new ScheduledThreadPoolExecutor(1);
 		this.session = session;
-		this.testService = testService;
+		this.LogViewerService = LogViewerService;
 	}
 
 	public void finalize() 
@@ -52,12 +53,11 @@ public class TimerExecutor
 		{
 			try 
 			{
-				S3VO s3VO = new S3VO();
-				List<S3VO> list = testService.getS3(s3VO);
+				List<S3VO> list = LogViewerService.getS3Count();
 
-				System.out.println("runnable1 " + LocalTime.now());
 				JSONObject json = new JSONObject();
 				json.put("type", "chartdata");
+				json.put("tname", "S3");
 				JSONArray arr = new JSONArray();
 
 				for (int i = 0; i < list.size(); i++) 
@@ -76,8 +76,35 @@ public class TimerExecutor
 			{
 				e.printStackTrace();
 			}
-		};
+			
+			try 
+			{
+				List<ApacheVO> list = LogViewerService.getApacheCount();
 
+				JSONObject json = new JSONObject();
+				json.put("type", "chartdata");
+				json.put("tname", "Apache");
+				JSONArray arr = new JSONArray();
+
+				for (int i = 0; i < list.size(); i++) 
+				{
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("keyword", list.get(i).getKeyword());
+					jsonObject.put("val", list.get(i).getVal());
+
+					arr.add(jsonObject);
+				}
+
+				json.put("value", arr);
+				session.sendMessage(new TextMessage(json.toJSONString()));
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}
+			System.out.println("runnable1 " + LocalTime.now());
+		};
+/*
 		@SuppressWarnings("unchecked")
 		Runnable runnable2 = () -> {
 			try {
@@ -91,9 +118,9 @@ public class TimerExecutor
 				e.printStackTrace();
 			}
 		};
-
+*/
 		executor.scheduleAtFixedRate(runnable1, 0, c1Interval, TimeUnit.MILLISECONDS);
-		executor.scheduleAtFixedRate(runnable2, 0, c2Interval, TimeUnit.MILLISECONDS);
+	//	executor.scheduleAtFixedRate(runnable2, 0, c2Interval, TimeUnit.MILLISECONDS);
 	}
 
 	public void stop() {

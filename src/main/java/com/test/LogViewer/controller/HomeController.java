@@ -1,4 +1,4 @@
-package com.test.websockettest.controller;
+package com.test.LogViewer.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -23,10 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
-import com.test.websockettest.service.AlarmTeskService;
-import com.test.websockettest.service.TestService;
-import com.test.websockettest.vo.S3VO;
-import com.test.websockettest.vo.TestVO;
+import com.test.LogViewer.service.AlarmTeskService;
+import com.test.LogViewer.service.LogViewerService;
+import com.test.LogViewer.vo.S3VO;
 
 /**
  * Handles requests for the application home page.
@@ -41,7 +40,7 @@ public class HomeController {
     private DataSource ds;
     
     @Autowired
-    TestService TestService;
+    LogViewerService LogViewerService;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -124,13 +123,13 @@ public class HomeController {
         clientHttpRequestFactory.setConnectTimeout(3000);
         return clientHttpRequestFactory;
     }
-	
+	/*
 	@RequestMapping(value = "/testDB")
 	public String testDB(Locale locale, Model model) {	
         TestVO testVO = new TestVO();
         testVO.setC2("abc");
         
-        List<TestVO> list = TestService.getTestValue(testVO);
+        List<TestVO> list = LogViewerService.getTestValue(testVO);
         
         if( list.size() > 0 ){
         	String aa = "";
@@ -146,12 +145,12 @@ public class HomeController {
         }
 		return "home";
 	}
-	
+	*/
 	@RequestMapping(value = "/testS3")
 	public String testS3(Locale locale, Model model) {	
         S3VO s3VO = new S3VO();
         
-        List<S3VO> list = TestService.getS3(s3VO);
+        List<S3VO> list = LogViewerService.getS3(s3VO);
         
         for(int i = 0; i < list.size(); i++)
         {
