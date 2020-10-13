@@ -46,6 +46,12 @@
   border: inset;
 }
 
+.errorContainer {
+    overflow: scroll;
+    height: 90%;
+    transform: translate(0px,-50px);
+}
+
 .btn {
   background: linear-gradient(to right, #dce35b, #45b649);
   padding: 10px 25px;
@@ -64,5 +70,22 @@
 .container.modal-open .modal {
   top: 70%;
   left: 20%;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
 }
 

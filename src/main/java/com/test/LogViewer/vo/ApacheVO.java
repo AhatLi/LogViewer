@@ -8,10 +8,17 @@ public class ApacheVO {
 	private String version;
 	private String code;
 	private String id;
+	private String wdate;
 	
 	private String keyword;
 	private int val;
 	
+	public String getWdate() {
+		return wdate;
+	}
+	public void setWdate(String wdate) {
+		this.wdate = wdate;
+	}
 	public String getIp() {
 		return ip;
 	}

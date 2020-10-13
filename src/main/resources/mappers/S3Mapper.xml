@@ -11,17 +11,22 @@
             SELECT sc_status AS keyword, COUNT(*) AS val FROM s3 GROUP BY sc_status
       </select>
 
-      <select id="getS3Error" resultType="S3VO" parameterType="S3VO">
+      <select id="getS3Error" resultType="S3VO" parameterType="String">
             SELECT * FROM s3 WHERE 
              <![CDATA[
-            sc_status >= 400 AND sc_status < 500
+            sc_status >= 400 
+            AND sc_status < 500
+            AND wdate >= #{value}
+            ORDER BY wdate DESC
             ]]>
       </select>
       
-      <select id="getS3ErrorCount" resultType="S3VO">
+      <select id="getS3ErrorCount" resultType="S3VO" parameterType="String">
             SELECT sc_status AS keyword, COUNT(*) AS val FROM s3 WHERE
              <![CDATA[
-            sc_status >= 400 AND sc_status < 500
+            sc_status >= 400 
+            AND sc_status < 500 
+            AND wdate >= #{value}
             ]]>
             GROUP BY sc_status
       </select>

@@ -14,11 +14,18 @@ public class S3VO {
     private String sc_content_type;
     private String date;
 	private String time;
+	private String wdate;
 	
 	private String keyword;
 	private int val;
     
-    public String getKeyword() {
+    public String getWdate() {
+		return wdate;
+	}
+	public void setWdate(String wdate) {
+		this.wdate = wdate;
+	}
+	public String getKeyword() {
 		return keyword;
 	}
 	public void setKeyword(String keyword) {

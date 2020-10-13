@@ -1,23 +1,15 @@
 package com.test.LogViewer.Handler;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -28,11 +20,13 @@ import com.test.LogViewer.vo.S3VO;
 public class TimerExecutor 
 {
 	private ScheduledThreadPoolExecutor executor = null;
-	private int c1Interval = 5000;
+	private int c1Interval = 3000;
 //	private int c2Interval = 3000;
 	private WebSocketSession session = null;
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	LogViewerService LogViewerService;
+ 	String lastSelectTime = "0000.00.00";
 
 	TimerExecutor(WebSocketSession session, LogViewerService LogViewerService) 
 	{
@@ -102,7 +96,50 @@ public class TimerExecutor
 			{
 				e.printStackTrace();
 			}
-			System.out.println("runnable1 " + LocalTime.now());
+			
+	     	try
+	     	{
+	     		List<S3VO> slist = LogViewerService.getS3Error(lastSelectTime);
+	     		List<ApacheVO> alist = LogViewerService.getApacheError(lastSelectTime);
+	     		
+	     		Date date = new Date();
+	         	lastSelectTime = dateFormat.format(date);
+	         	
+				JSONObject json = new JSONObject();
+				json.put("type", "error");
+				JSONArray arr = new JSONArray();
+
+	     		for(int i = 0; i < slist.size(); i++)
+	     		{
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("type", "S3");
+					jsonObject.put("code", slist.get(i).getSc_status());
+					jsonObject.put("text", slist.get(i).getX_edge_location() + " : " + slist.get(i).getCs_Host() + slist.get(i).getCs_uri_stem());
+					jsonObject.put("date", slist.get(i).getWdate());
+
+					arr.add(jsonObject);
+	     		}
+	     		for(int i = 0; i < alist.size(); i++)
+	     		{
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("type", "Apache");
+					jsonObject.put("code", alist.get(i).getCode());
+					jsonObject.put("text", alist.get(i).getUrl());
+					jsonObject.put("date", alist.get(i).getWdate());
+
+					arr.add(jsonObject);
+	     		}
+	     		
+	     		if(!arr.isEmpty())
+	     		{
+					json.put("value", arr);
+					session.sendMessage(new TextMessage(json.toJSONString()));
+	     		}
+	     	}
+	     	catch (Exception e) {
+	            System.out.println(e.toString());
+				e.printStackTrace();
+			}
 		};
 /*
 		@SuppressWarnings("unchecked")
@@ -120,7 +157,6 @@ public class TimerExecutor
 		};
 */
 		executor.scheduleAtFixedRate(runnable1, 0, c1Interval, TimeUnit.MILLISECONDS);
-	//	executor.scheduleAtFixedRate(runnable2, 0, c2Interval, TimeUnit.MILLISECONDS);
 	}
 
 	public void stop() {

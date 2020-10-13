@@ -170,6 +170,15 @@ chart2.background.stroke = am4core.color("blue");
 		
 		tmpChart.invalidateRawData();
 	}
+  	else if(data.type == "error")
+  	{
+		const arr = data.value;
+		for(var i = 0; i < arr.length; i++)
+		{
+			add_error_row(arr[i].code, arr[i].type, arr[i].text, arr[i].date);
+		}
+		openModal();
+  	}
   }
   function onError(evt) {
       writeToScreen('ERROR: ' + evt.data);
@@ -199,3 +208,30 @@ chart2.background.stroke = am4core.color("blue");
 	  		$('.container').addClass('modal-open');
 		}
 	}
+
+	function openModal()
+	{
+		if(!$('.container').hasClass('modal-open'))
+		{
+	  		$('.container').addClass('modal-open');
+		}
+	}
+	
+	
+ function add_error_row(type, code, msg, date) 
+ {
+    var my_tbody = document.getElementById('ErrorList');
+    var row = my_tbody.insertRow(0);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    cell1.innerHTML = type;
+    cell2.innerHTML = code;
+    cell3.innerHTML = msg;
+    cell4.innerHTML = date;
+  }
+  
+  
+  
+  send_message()

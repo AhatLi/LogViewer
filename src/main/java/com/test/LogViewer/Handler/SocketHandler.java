@@ -8,10 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -132,33 +128,4 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
     public void afterPropertiesSet() throws Exception {
         System.out.println("afterPropertiesSet");
     }
-    
-    void test()
-    {
-        String url = "https://api.line.me/v2/bot/message/broadcast";
-        String body = "{\r\n"
-        		+ "    \"messages\":[\r\n"
-        		+ "        {\r\n"
-        		+ "            \"type\":\"text\",\r\n"
-        		+ "            \"text\":\"Hello, world1\"\r\n"
-        		+ "        }\r\n"
-        		+ "    ]\r\n"
-        		+ "}";
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-        headers.set("Authorization", "Bearer 2QT5qYSNPxQJHqTt8AYjmzPYr2SopUg70mfoGAXInEpVy0gAXiJ2YZk3FZTTImDy9xwTCEU1YFXvecYFfwVXBuTOQQC4mLgSpNeLaiREFbTzaMZ/L+QiWXwvJJfP0rRXlgcjtXBGgXJ6i7KbYlqTagdB04t89/1O/w1cDnyilFU=");
-        
-        HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-/*
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
-        String resultBody = responseEntity.getBody();
-        int resultCode = responseEntity.getStatusCode().value();
-        System.out.println(resultBody);
-        System.out.println(resultCode);
-        */
-        System.out.println("test()");
-    }
-
 }

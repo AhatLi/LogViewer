@@ -11,12 +11,23 @@
             SELECT code AS keyword, COUNT(*) AS val FROM apache GROUP BY code
       </select>
 
-      <select id="getApacheError" resultType="ApacheVO" parameterType="ApacheVO">
-            SELECT * FROM apache
+      <select id="getApacheError" resultType="ApacheVO" parameterType="String">
+            SELECT * FROM apache WHERE 
+             <![CDATA[
+            code >= 300 
+            AND code < 600
+            AND wdate >= #{value}
+            ]]>
       </select>
       
-      <select id="getApacheErrorCount" resultType="ApacheVO">
-            SELECT code AS keyword, COUNT(*) AS val FROM apache WHERE GROUP BY code
+      <select id="getApacheErrorCount" resultType="ApacheVO" parameterType="String">
+            SELECT code AS keyword, COUNT(*) AS val FROM apache 
+             <![CDATA[
+            code >= 300 
+            AND code < 600
+            AND wdate >= #{value}
+            ]]>
+            GROUP BY code
       </select>
       
 </mapper>

@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,6 @@ public class HomeController {
 	AlarmTeskService scheduler;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-    private DataSource ds;
     
     @Autowired
     LogViewerService LogViewerService;
