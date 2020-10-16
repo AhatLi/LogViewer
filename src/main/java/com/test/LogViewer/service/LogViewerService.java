@@ -3,6 +3,7 @@ package com.test.LogViewer.service;
 import java.util.List;
 
 import com.test.LogViewer.vo.ApacheVO;
+import com.test.LogViewer.vo.ErrLogVO;
 import com.test.LogViewer.vo.S3VO;
 
 public interface LogViewerService 
@@ -16,4 +17,6 @@ public interface LogViewerService
     public List<ApacheVO> getApacheCount();
     public List<ApacheVO> getApacheError(String date);
     public List<ApacheVO> getApacheErrorCount(String date);
+    
+    public List<ErrLogVO> getErrorLog(String date);
 }

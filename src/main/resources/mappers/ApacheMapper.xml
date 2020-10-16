@@ -14,7 +14,7 @@
       <select id="getApacheError" resultType="ApacheVO" parameterType="String">
             SELECT * FROM apache WHERE 
              <![CDATA[
-            code >= 300 
+            code >= 400 
             AND code < 600
             AND wdate >= #{value}
             ]]>
@@ -23,7 +23,7 @@
       <select id="getApacheErrorCount" resultType="ApacheVO" parameterType="String">
             SELECT code AS keyword, COUNT(*) AS val FROM apache 
              <![CDATA[
-            code >= 300 
+            WHERE code >= 400 
             AND code < 600
             AND wdate >= #{value}
             ]]>

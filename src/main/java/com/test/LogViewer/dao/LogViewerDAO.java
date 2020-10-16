@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.test.LogViewer.vo.ApacheVO;
+import com.test.LogViewer.vo.ErrLogVO;
 import com.test.LogViewer.vo.S3VO;
 
 @Repository
@@ -45,5 +46,9 @@ public class LogViewerDAO {
     
     public List<ApacheVO> getApacheErrorCount(String date){
     	return SqlSession.selectList("websocket.mappers.ApacheMapper.getApacheErrorCount", date);
+    }
+    
+    public List<ErrLogVO> getErrorLog(String date){
+    	return SqlSession.selectList("websocket.mappers.ErrLogMapper.getErrorLog", date);
     }
 }

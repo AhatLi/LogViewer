@@ -157,6 +157,12 @@ chart2.background.stroke = am4core.color("blue");
 			return;
 		}
 		
+		if(tmpChart.data.length != arr.length)
+		{
+			tmpChart.data = data.value;
+			return;
+		}
+		
 		am4core.array.each(tmpChart.data, function (item) 
 		{
 			 if(item.keyword != arr[j].keyword)
@@ -226,8 +232,8 @@ chart2.background.stroke = am4core.color("blue");
     var cell2 = row.insertCell(1);
     var cell3 = row.insertCell(2);
     var cell4 = row.insertCell(3);
-    cell1.innerHTML = type;
-    cell2.innerHTML = code;
+    cell1.innerHTML = code;
+    cell2.innerHTML = type;
     cell3.innerHTML = msg;
     cell4.innerHTML = date;
   }

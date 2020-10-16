@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="websocket.mappers.ErrLogMapper">      
+      <select id="getErrorLog" resultType="ErrLogVO" parameterType="String">
+		SELECT "Apache" as type, code, CONCAT(ip, " : ", url) as msg, wdate FROM apache
+             <![CDATA[
+		WHERE code >= 400 AND code < 600 AND wdate >= #{value}
+            ]]>
+		UNION
+		SELECT "S3" AS type, sc_status AS CODE, CONCAT(c_ip, "(", x_edge_location, ") : ", cs_uri_stem) as msg, wdate from s3
+             <![CDATA[
+		WHERE sc_status >= 400 AND sc_status < 500 AND wdate >= #{value}
+            ]]>
+		ORDER BY wdate ASC
+      </select>
+</mapper>
+

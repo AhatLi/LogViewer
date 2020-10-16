@@ -74,26 +74,29 @@ public class AlarmTeskService
      		if(msg.isEmpty())
      			return;
 
-			JSONObject json = new JSONObject();
-			JSONArray messages = new JSONArray();
-         	for(int i = 0; i < msg.size(); i++)
-         	{
-
-				JSONObject body = new JSONObject();
-				body.put("type", "text");
-				body.put("text", msg.get(i));
-				messages.add(body);
-         	}
-         	json.put("messages", messages);
-         	         	
+	         	
 	        HttpHeaders headers = new HttpHeaders();
 	        
 	        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 	        headers.set("Authorization", "Bearer 2QT5qYSNPxQJHqTt8AYjmzPYr2SopUg70mfoGAXInEpVy0gAXiJ2YZk3FZTTImDy9xwTCEU1YFXvecYFfwVXBuTOQQC4mLgSpNeLaiREFbTzaMZ/L+QiWXwvJJfP0rRXlgcjtXBGgXJ6i7KbYlqTagdB04t89/1O/w1cDnyilFU=");
 
 	        String url = "https://api.line.me/v2/bot/message/broadcast";
-	        HttpEntity<String> entity = new HttpEntity<String>(json.toJSONString(), headers);
-	        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+	        
+         	for(int i = 0; i < msg.size(); i++)
+         	{
+    			JSONObject json = new JSONObject();
+    			JSONArray messages = new JSONArray();
+
+				JSONObject body = new JSONObject();
+				body.put("type", "text");
+				body.put("text", msg.get(i));
+				messages.add(body);
+	         	json.put("messages", messages);
+
+	         	System.out.println(json.toJSONString());
+		        HttpEntity<String> entity = new HttpEntity<String>(json.toJSONString(), headers);
+		        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+         	}
 	
 	        //String resultBody = responseEntity.getBody();
 	        //int resultCode = responseEntity.getStatusCode().value();

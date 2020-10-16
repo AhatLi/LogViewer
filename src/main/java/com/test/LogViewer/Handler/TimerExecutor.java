@@ -15,6 +15,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.test.LogViewer.service.LogViewerService;
 import com.test.LogViewer.vo.ApacheVO;
+import com.test.LogViewer.vo.ErrLogVO;
 import com.test.LogViewer.vo.S3VO;
 
 public class TimerExecutor 
@@ -99,8 +100,7 @@ public class TimerExecutor
 			
 	     	try
 	     	{
-	     		List<S3VO> slist = LogViewerService.getS3Error(lastSelectTime);
-	     		List<ApacheVO> alist = LogViewerService.getApacheError(lastSelectTime);
+	     		List<ErrLogVO> elist = LogViewerService.getErrorLog(lastSelectTime);
 	     		
 	     		Date date = new Date();
 	         	lastSelectTime = dateFormat.format(date);
@@ -108,24 +108,13 @@ public class TimerExecutor
 				JSONObject json = new JSONObject();
 				json.put("type", "error");
 				JSONArray arr = new JSONArray();
-
-	     		for(int i = 0; i < slist.size(); i++)
+	     		for(int i = 0; i < elist.size(); i++)
 	     		{
 					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("type", "S3");
-					jsonObject.put("code", slist.get(i).getSc_status());
-					jsonObject.put("text", slist.get(i).getX_edge_location() + " : " + slist.get(i).getCs_Host() + slist.get(i).getCs_uri_stem());
-					jsonObject.put("date", slist.get(i).getWdate());
-
-					arr.add(jsonObject);
-	     		}
-	     		for(int i = 0; i < alist.size(); i++)
-	     		{
-					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("type", "Apache");
-					jsonObject.put("code", alist.get(i).getCode());
-					jsonObject.put("text", alist.get(i).getUrl());
-					jsonObject.put("date", alist.get(i).getWdate());
+					jsonObject.put("type", elist.get(i).getType());
+					jsonObject.put("code", elist.get(i).getCode());
+					jsonObject.put("text", elist.get(i).getMsg());
+					jsonObject.put("date", elist.get(i).getWdate());
 
 					arr.add(jsonObject);
 	     		}

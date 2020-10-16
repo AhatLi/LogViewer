@@ -4,5 +4,6 @@
       <typeAliases>
             <typeAlias alias="S3VO" type="com.test.LogViewer.vo.S3VO"></typeAlias>
             <typeAlias alias="ApacheVO" type="com.test.LogViewer.vo.ApacheVO"></typeAlias>
+            <typeAlias alias="ErrLogVO" type="com.test.LogViewer.vo.ErrLogVO"></typeAlias>
       </typeAliases>
 </configuration>

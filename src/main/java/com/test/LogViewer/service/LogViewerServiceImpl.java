@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.test.LogViewer.vo.ApacheVO;
+import com.test.LogViewer.vo.ErrLogVO;
 import com.test.LogViewer.vo.S3VO;
 import com.test.LogViewer.dao.LogViewerDAO;
 
@@ -61,4 +62,10 @@ public class LogViewerServiceImpl implements LogViewerService {
 	{
         return LogViewerDAO.getApacheErrorCount(date);
 	}
+
+	@Override
+    public List<ErrLogVO> getErrorLog(String date)
+    {
+        return LogViewerDAO.getErrorLog(date);
+    }
 }
