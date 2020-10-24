@@ -15,7 +15,8 @@ public class S3VO {
     private String date;
 	private String time;
 	private String wdate;
-	
+
+	private String msg;
 	private String keyword;
 	private int val;
     
@@ -114,5 +115,11 @@ public class S3VO {
 	}
 	public void setTime(String time) {
 		this.time = time;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 }

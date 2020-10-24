@@ -16,8 +16,8 @@ public class LogViewerDAO {
     @Autowired
     private SqlSessionTemplate SqlSession;
     
-    public List<S3VO> getS3(S3VO s3VO){
-    	return SqlSession.selectList("websocket.mappers.S3Mapper.getS3", s3VO);
+    public List<S3VO> getS3(String code){
+    	return SqlSession.selectList("websocket.mappers.S3Mapper.getS3", code);
     }
     
     public List<S3VO> getS3Count(){
@@ -32,8 +32,8 @@ public class LogViewerDAO {
     	return SqlSession.selectList("websocket.mappers.S3Mapper.getS3ErrorCount", date);
     }
     
-    public List<ApacheVO> getApache(ApacheVO s3VO){
-    	return SqlSession.selectList("websocket.mappers.ApacheMapper.getApache", s3VO);
+    public List<ApacheVO> getApache(String code){
+    	return SqlSession.selectList("websocket.mappers.ApacheMapper.getApache", code);
     }
     
     public List<ApacheVO> getApacheCount(){

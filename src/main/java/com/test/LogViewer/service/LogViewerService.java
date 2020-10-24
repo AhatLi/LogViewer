@@ -8,12 +8,12 @@ import com.test.LogViewer.vo.S3VO;
 
 public interface LogViewerService 
 {
-    public List<S3VO> getS3(S3VO s3VO);
+    public List<S3VO> getS3(String code);
     public List<S3VO> getS3Count();
     public List<S3VO> getS3Error(String date);
     public List<S3VO> getS3ErrorCount(String date);
     
-    public List<ApacheVO> getApache(ApacheVO apacheVO);
+    public List<ApacheVO> getApache(String code);
     public List<ApacheVO> getApacheCount();
     public List<ApacheVO> getApacheError(String date);
     public List<ApacheVO> getApacheErrorCount(String date);

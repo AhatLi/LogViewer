@@ -16,9 +16,9 @@ public class LogViewerServiceImpl implements LogViewerService {
 	LogViewerDAO LogViewerDAO;
 
 	@Override
-    public List<S3VO> getS3(S3VO s3VO)
+    public List<S3VO> getS3(String code)
 	{
-        return LogViewerDAO.getS3(s3VO);
+        return LogViewerDAO.getS3(code);
 	}
 	
 	@Override
@@ -40,9 +40,9 @@ public class LogViewerServiceImpl implements LogViewerService {
 	}
 
 	@Override
-    public List<ApacheVO> getApache(ApacheVO apacheVO)
+    public List<ApacheVO> getApache(String code)
 	{
-        return LogViewerDAO.getApache(apacheVO);
+        return LogViewerDAO.getApache(code);
 	}
 
 	@Override

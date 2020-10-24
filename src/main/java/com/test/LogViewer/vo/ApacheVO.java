@@ -9,7 +9,8 @@ public class ApacheVO {
 	private String code;
 	private String id;
 	private String wdate;
-	
+
+	private String msg;
 	private String keyword;
 	private int val;
 	
@@ -72,5 +73,11 @@ public class ApacheVO {
 	}
 	public void setVal(int val) {
 		this.val = val;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 }

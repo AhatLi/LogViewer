@@ -3,8 +3,8 @@
 
 <mapper namespace="websocket.mappers.S3Mapper">
 
-      <select id="getS3" resultType="S3VO" parameterType="S3VO">
-            SELECT * FROM s3
+      <select id="getS3" resultType="S3VO" parameterType="String">
+            SELECT CONCAT(c_ip, "(", x_edge_location, ") : ", cs_uri_stem) as msg, wdate FROM s3 WHERE sc_status = #{value} ORDER BY wdate DESC LIMIT 100
       </select>
       
       <select id="getS3Count" resultType="S3VO">

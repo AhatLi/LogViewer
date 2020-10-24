@@ -3,8 +3,8 @@
 
 <mapper namespace="websocket.mappers.ApacheMapper">
 
-      <select id="getApache" resultType="ApacheVO" parameterType="ApacheVO">
-            SELECT * FROM apache
+      <select id="getApache" resultType="ApacheVO" parameterType="String">
+            SELECT CONCAT(ip, " : ", url) as msg, wdate FROM apache WHERE code = #{value} ORDER BY wdate DESC LIMIT 100
       </select>
       
       <select id="getApacheCount" resultType="ApacheVO">

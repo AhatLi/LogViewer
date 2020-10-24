@@ -1,22 +1,28 @@
 package com.test.LogViewer.Handler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.test.LogViewer.service.LogViewerService;
+import com.test.LogViewer.vo.ApacheVO;
+import com.test.LogViewer.vo.S3VO;
 
 public class SocketHandler extends TextWebSocketHandler implements InitializingBean {
     //private final Logger logger = LogManager.getLogger(getClass());
@@ -52,36 +58,6 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
     public SocketHandler ()
     {
         super();
-        System.out.println("create SocketHandler instance!");
-
-     	ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
-       	restTemplate = new RestTemplate(requestFactory);  	
-
-       	ThreadFactory threadFactory = new ThreadFactory() {
-			
-			@Override
-			public Thread newThread(Runnable r) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-		
-		this.executor = new ScheduledThreadPoolExecutor(1, threadFactory);
-
-		Runnable runnable1 = () -> 
-        {
-            try 
-            {
-            //	test();
-	        }
-	        catch (Exception e) 
-	        {
-	            e.printStackTrace();
-	        }
-        };
-		
-        threadFactory.newThread(runnable1);
-     	executor.scheduleAtFixedRate(runnable1, 0, c1Interval, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -109,7 +85,61 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
           super.handleMessage(session, message);
-          System.out.println("receive message:"+message.toString());
+          
+          String msg = message.getPayload().toString();
+          String s[] = msg.split(",");
+          
+          if(s[0].equals("S3"))
+          {
+        	    List<S3VO> list = LogViewerService.getS3(s[1]);
+				
+				JSONObject json = new JSONObject();
+				json.put("type", "logdata");
+				json.put("tname", "S3");
+				json.put("code", s[1]);
+				JSONArray arr = new JSONArray();
+				
+				for (int i = 0; i < list.size(); i++) 
+				{
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("msg", list.get(i).getMsg());
+					jsonObject.put("wdate", list.get(i).getWdate());
+				
+					arr.add(jsonObject);
+				}
+				
+				json.put("value", arr);
+				session.sendMessage(new TextMessage(json.toJSONString()));
+		          System.out.println(json.toString());
+          }
+          else if(s[0].equals("apache"))
+          {
+        	  
+	      	    List<ApacheVO> list = LogViewerService.getApache(s[1]);
+				
+				JSONObject json = new JSONObject();
+				json.put("type", "logdata");
+				json.put("tname", "Apache");
+				json.put("code", s[1]);
+				JSONArray arr = new JSONArray();
+				
+				for (int i = 0; i < list.size(); i++) 
+				{
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("msg", list.get(i).getMsg());
+					jsonObject.put("wdate", list.get(i).getWdate());
+				
+					arr.add(jsonObject);
+				}
+				
+				json.put("value", arr);
+				session.sendMessage(new TextMessage(json.toJSONString()));
+		          System.out.println(json.toString());
+          }
+          
+          System.out.println("receive message:"+message.getPayload().toString());
+          
+          
     }
 
     @Override

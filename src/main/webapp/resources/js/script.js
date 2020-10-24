@@ -1,6 +1,6 @@
 
  var chart = null;
- am4core.ready(function() {
+// am4core.ready(function() {
 
  // Themes begin
  am4core.useTheme(am4themes_animated);
@@ -88,6 +88,7 @@ title2.marginBottom = 30;
  labelBullet2.label.dy = -10;
  labelBullet2.label.text = "{values.valueY.workingValue.formatNumber('#.')}";
 
+
 chart1.background.stroke = am4core.color("red");
 chart2.background.stroke = am4core.color("blue"); 
 
@@ -101,9 +102,23 @@ chart2.background.stroke = am4core.color("blue");
     });
  
  //categoryAxis.sortBySeries = series;
- }); // end am4core.ready()
+// }); // end am4core.ready()
  
-  var wsUri = "ws://localhost:8080/LogViewer/websocket/echo.do";
+  var wsUri = "ws://127.0.0.1:8080/LogViewer/websocket/echo.do";
+
+
+
+	series1.columns.template.events.on("hit", function(ev) 
+	{
+		const title = ev.target.readerTitle;
+  		doSend("S3," + title.substring(0, title.indexOf(' ')))
+	}, this);
+	
+	series2.columns.template.events.on("hit", function(ev) 
+	{
+		const title = ev.target.readerTitle;
+  		doSend("apache," + title.substring(0, title.indexOf(' ')))
+	}, this);
  
   function init() {
       var output = document.getElementById("output");
@@ -124,8 +139,6 @@ chart2.background.stroke = am4core.color("blue");
   }
  
   function onOpen(evt) {
-      writeToScreen("Connected to Endpoint!");
-      doSend(textID.value);
   }
   function onMessage(evt) {       
   	
@@ -135,7 +148,6 @@ chart2.background.stroke = am4core.color("blue");
   	if(data.type == "text")
 	{
 		const text = data.value;
-	    writeToScreen("Message Received: " + text);
 	}
   	else if(data.type == "chartdata")
 	{
@@ -185,22 +197,36 @@ chart2.background.stroke = am4core.color("blue");
 		}
 		openModal();
   	}
+  	else if(data.type == "error")
+  	{
+		const arr = data.value;
+		for(var i = 0; i < arr.length; i++)
+		{
+			add_error_row(arr[i].code, arr[i].type, arr[i].text, arr[i].date);
+		}
+		openModal();
+  	}
+  	else if(data.type == "logdata")
+  	{
+		const arr = data.value;
+		var b = '<table><colgroup><col width="70%" /><col width="30%" /></colgroup><tr><th>Log Message</th><th>wdate</th>';
+		
+		for(var i = 0; i < arr.length; i++)
+		{
+			b += '<tr><td>' + arr[i].msg + '</td><td>' + arr[i].wdate + '</td></tr>'
+		}
+		b += '</table>';
+		document.getElementById("log_msg").innerHTML = b;
+		
+        modal('my_modal');
+  	}
   }
   function onError(evt) {
-      writeToScreen('ERROR: ' + evt.data);
   }
   function doSend(message) {
-      writeToScreen("Message Sent: " + message);
       websocket.send(message);
-      //websocket.close();
   }
-  function writeToScreen(message) {
-      var pre = document.createElement("p");
-      pre.style.wordWrap = "break-word";
-      pre.innerHTML = message;
-      
-      output.appendChild(pre);
-  }
+
   window.addEventListener("load", init, false);
 
 	function toggleModal()
@@ -224,6 +250,54 @@ chart2.background.stroke = am4core.color("blue");
 	}
 	
 	
+    function modal(id) {
+        var zIndex = 9999;
+        var modal = document.getElementById(id);
+
+        // 모달 div 뒤에 희끄무레한 레이어
+        var bg = document.createElement('div');
+        bg.setStyle({
+            position: 'fixed',
+            zIndex: zIndex,
+            left: '0px',
+            top: '0px',
+            width: '100%',
+            height: '100%',
+            overflow: 'auto',
+            // 레이어 색갈은 여기서 바꾸면 됨
+            backgroundColor: 'rgba(0,0,0,0.4)'
+        });
+        document.body.append(bg);
+
+        // 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
+        modal.querySelector('.modal_close_btn').addEventListener('click', function() {
+            bg.remove();
+            modal.style.display = 'none';
+        });
+
+        modal.setStyle({
+            position: 'fixed',
+            display: 'block',
+            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+
+            // 시꺼먼 레이어 보다 한칸 위에 보이기
+            zIndex: zIndex + 1,
+
+            // div center 정렬
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            msTransform: 'translate(-50%, -50%)',
+            webkitTransform: 'translate(-50%, -50%)'
+        });
+    }
+
+    // Element 에 style 한번에 오브젝트로 설정하는 함수 추가
+    Element.prototype.setStyle = function(styles) {
+        for (var k in styles) this.style[k] = styles[k];
+        return this;
+    };
+	
  function add_error_row(type, code, msg, date) 
  {
     var my_tbody = document.getElementById('ErrorList');
@@ -237,7 +311,5 @@ chart2.background.stroke = am4core.color("blue");
     cell3.innerHTML = msg;
     cell4.innerHTML = date;
   }
-  
-  
   
   send_message()
