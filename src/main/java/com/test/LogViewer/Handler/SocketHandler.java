@@ -110,11 +110,9 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
 				
 				json.put("value", arr);
 				session.sendMessage(new TextMessage(json.toJSONString()));
-		          System.out.println(json.toString());
           }
           else if(s[0].equals("apache"))
           {
-        	  
 	      	    List<ApacheVO> list = LogViewerService.getApache(s[1]);
 				
 				JSONObject json = new JSONObject();
@@ -134,12 +132,9 @@ public class SocketHandler extends TextWebSocketHandler implements InitializingB
 				
 				json.put("value", arr);
 				session.sendMessage(new TextMessage(json.toJSONString()));
-		          System.out.println(json.toString());
           }
           
           System.out.println("receive message:"+message.getPayload().toString());
-          
-          
     }
 
     @Override

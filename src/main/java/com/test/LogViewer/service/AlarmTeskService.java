@@ -73,9 +73,6 @@ public class AlarmTeskService
      		
      		if(msg.isEmpty())
      			return;
-     		
-
-         	System.out.println("curTime : " + lastSelectTime + " S3 err : " + slist.size() + " apache err : " + alist.size());
 	         	
 	        HttpHeaders headers = new HttpHeaders();
 	        
@@ -99,12 +96,8 @@ public class AlarmTeskService
 			messages.add(body);
          	json.put("messages", messages);
 
-         	System.out.println(json.toJSONString());
 	        HttpEntity<String> entity = new HttpEntity<String>(json.toJSONString(), headers);
 	        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-	
-	        //String resultBody = responseEntity.getBody();
-	        //int resultCode = responseEntity.getStatusCode().value();
      	}
      	catch (Exception e) {
             System.out.println(e.toString());
